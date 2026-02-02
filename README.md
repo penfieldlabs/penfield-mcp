@@ -2,8 +2,6 @@
 
 **Persistent memory for AI agents.** Store decisions, preferences, and context that survive across sessions. Build knowledge graphs that compound over time. Works with Claude, Cursor, Windsurf, Gemini CLI, and any MCP-compatible tool.
 
-[Website](https://penfield.app) · [Sign Up](https://portal.penfield.app/sign-up) · [Documentation](#documentation) · [@penfieldlabs](https://x.com/penfieldlabs)
-
 ---
 
 ## Quick Start
