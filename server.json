@@ -1,0 +1,19 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.penfieldlabs/penfield-mcp",
+  "title": "Penfield Memory",
+  "description": "Persistent memory and knowledge graphs for AI agents. Hybrid search (BM25 + vector + graph), 24 relationship types, context checkpoints, artifact storage, and personality system.",
+  "status": "active",
+  "version": "1.22.0",
+  "websiteUrl": "https://penfield.app",
+  "repository": {
+    "url": "https://github.com/penfieldlabs/penfield-mcp",
+    "source": "github"
+  },
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://mcp.penfield.app/"
+    }
+  ]
+}
