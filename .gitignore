@@ -1,3 +1,6 @@
+# Secrets
+.mcpregistry_*
+
 # Dependencies
 node_modules/
 
