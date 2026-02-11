@@ -142,11 +142,9 @@ Milestone states and progress markers.
 
 ## Identity Types
 
-These types are typically set via personality configuration and rarely stored manually.
-
 ### identity_core
 
-Immutable identity facts about the agent or user.
+Core AI identity information (immutable). **Protected type** — cannot be created or updated via the memories API or MCP `store` tool. Managed through the `/api/v2/personality` endpoints or [portal](https://portal.penfield.app/personality).
 
 **Use for:**
 - Core identity attributes
@@ -161,7 +159,7 @@ Immutable identity facts about the agent or user.
 
 ### personality_trait
 
-Behavioral patterns and communication preferences.
+AI personality characteristics (evolvable). **Protected type** — cannot be created or updated via the memories API or MCP `store` tool. Managed through the `/api/v2/personality` endpoints or [portal](https://portal.penfield.app/personality). Custom traits are a Premium+ feature.
 
 **Use for:**
 - Communication style preferences
