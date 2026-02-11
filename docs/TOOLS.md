@@ -8,22 +8,24 @@ Complete reference for all Penfield MCP tools. Tools are namespaced as `Penfield
 
 ### store
 
-Store important information as a memory with content, tags, and importance scoring.
+Store a new memory with automatic type detection.
 
 **Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `content` | string | Yes | The memory content. Be specific and include context. |
-| `memory_type` | string | Yes | One of: `fact`, `insight`, `correction`, `conversation`, `reference`, `task`, `strategy`, `checkpoint`, `identity_core`, `personality_trait`, `relationship` |
-| `importance` | number | No | 0.0–1.0 score. Default: 0.5 |
-| `tags` | string[] | No | 2–5 lowercase tags for categorization |
+| `content` | string | Yes | Memory content (1-10,000 chars) |
+| `tags` | string[] | No | Tags for categorization |
+| `importance` | number | No | 0.0–1.0 (auto-calculated if omitted) |
+
+**Note:** Memory type is auto-detected from content. Valid types: fact, insight, conversation, correction, reference, task, checkpoint, relationship, strategy.
+
+**Protected types:** `identity_core` and `personality_trait` are managed exclusively through the `/api/v2/personality` endpoints and cannot be created via `store`. The auto-detection will not produce these types.
 
 **Example:**
 ```json
 {
   "content": "[Preferences] User prefers TypeScript over JavaScript. Values strict typing and explicit error handling.",
-  "memory_type": "fact",
   "importance": 0.8,
   "tags": ["preferences", "languages", "typescript"]
 }
@@ -33,32 +35,26 @@ Store important information as a memory with content, tags, and importance scori
 
 ### recall
 
-Hybrid search combining BM25 (keyword), vector (semantic), and graph (connections) to find relevant memories.
+Hybrid search (BM25 + vector + graph). Use when you need context before responding, resuming a topic, or looking up prior decisions.
 
 **Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | `query` | string | Yes | Search query |
-| `limit` | number | No | Max results. Default: 10 |
-| `memory_types` | string[] | No | Filter by memory types |
-| `importance_threshold` | number | No | Minimum importance (0.0–1.0) |
-| `bm25_weight` | number | No | Keyword matching weight. Default: 0.4 |
-| `vector_weight` | number | No | Semantic similarity weight. Default: 0.4 |
-| `graph_weight` | number | No | Graph traversal weight. Default: 0.2 |
-| `enable_graph_expansion` | boolean | No | Follow connections. Default: true |
-| `time_window` | string | No | Filter by recency: `1d`, `7d`, `30d`, etc. |
+| `limit` | number | No | Max results (default: 10, max: 100) |
+| `source_type` | string | No | Filter: "memory", "document", or null for all |
+| `tags` | string[] | No | Filter by tags (OR logic) |
+| `start_date` | string | No | Filter by date (ISO 8601) |
+| `end_date` | string | No | Filter by date (ISO 8601) |
 
 **Example:**
 ```json
 {
   "query": "authentication architecture decisions",
   "limit": 5,
-  "memory_types": ["fact", "insight"],
-  "importance_threshold": 0.7,
-  "bm25_weight": 0.3,
-  "vector_weight": 0.5,
-  "graph_weight": 0.2
+  "tags": ["architecture"],
+  "start_date": "2025-01-01"
 }
 ```
 
@@ -66,15 +62,14 @@ Hybrid search combining BM25 (keyword), vector (semantic), and graph (connection
 
 ### search
 
-Semantic search with higher vector weight. Use when you don't have exact terms but know the concept.
+Semantic search (higher vector weight). Use for fuzzy concept search when you don't have exact terms.
 
 **Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `query` | string | Yes | Semantic search query |
-| `limit` | number | No | Max results. Default: 10 |
-| `memory_types` | string[] | No | Filter by memory types |
+| `query` | string | Yes | Search query |
+| `limit` | number | No | Max results (default: 10, max: 100) |
 
 **Example:**
 ```json
@@ -88,18 +83,18 @@ Semantic search with higher vector weight. Use when you don't have exact terms b
 
 ### fetch
 
-Retrieve a single memory by its UUID.
+Get a specific memory by ID.
 
 **Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `memory_id` | string | Yes | UUID of the memory |
+| `id` | UUID | Yes | Memory ID to fetch |
 
 **Example:**
 ```json
 {
-  "memory_id": "550e8400-e29b-41d4-a716-446655440000"
+  "id": "550e8400-e29b-41d4-a716-446655440000"
 }
 ```
 
@@ -139,15 +134,16 @@ Link two memories with a typed relationship.
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `from_memory_id` | string | Yes | Source memory UUID |
-| `to_memory_id` | string | Yes | Target memory UUID |
+| `from_memory` | UUID | Yes | Source memory ID |
+| `to_memory` | UUID | Yes | Target memory ID |
 | `relationship_type` | string | Yes | One of 24 relationship types (see [Relationships](RELATIONSHIPS.md)) |
+| `strength` | number | No | 0.0–1.0 (default: 0.5) |
 
 **Example:**
 ```json
 {
-  "from_memory_id": "550e8400-e29b-41d4-a716-446655440000",
-  "to_memory_id": "660e8400-e29b-41d4-a716-446655440001",
+  "from_memory": "550e8400-e29b-41d4-a716-446655440000",
+  "to_memory": "660e8400-e29b-41d4-a716-446655440001",
   "relationship_type": "supersedes"
 }
 ```
@@ -162,14 +158,14 @@ Remove a connection between two memories.
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `from_memory_id` | string | Yes | Source memory UUID |
-| `to_memory_id` | string | Yes | Target memory UUID |
+| `from_memory` | UUID | Yes | Source memory ID |
+| `to_memory` | UUID | Yes | Target memory ID |
 
 **Example:**
 ```json
 {
-  "from_memory_id": "550e8400-e29b-41d4-a716-446655440000",
-  "to_memory_id": "660e8400-e29b-41d4-a716-446655440001"
+  "from_memory": "550e8400-e29b-41d4-a716-446655440000",
+  "to_memory": "660e8400-e29b-41d4-a716-446655440001"
 }
 ```
 
@@ -177,21 +173,21 @@ Remove a connection between two memories.
 
 ### explore
 
-Traverse the knowledge graph from a memory, discovering connected memories up to a configurable depth.
+Traverse the knowledge graph from a starting memory.
 
 **Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `memory_id` | string | Yes | Starting memory UUID |
-| `depth` | number | No | How many hops to traverse. Default: 2 |
+| `start_memory` | UUID | Yes | Starting memory ID |
+| `max_depth` | number | No | Max traversal depth (default: 3, max: 10) |
 | `relationship_types` | string[] | No | Filter by relationship types |
 
 **Example:**
 ```json
 {
-  "memory_id": "550e8400-e29b-41d4-a716-446655440000",
-  "depth": 3,
+  "start_memory": "550e8400-e29b-41d4-a716-446655440000",
+  "max_depth": 3,
   "relationship_types": ["supports", "contradicts", "supersedes"]
 }
 ```
@@ -215,20 +211,23 @@ Load personality configuration and user preferences for the session. **Call this
 
 ### reflect
 
-Analyze recent activity to find patterns, themes, and insights.
+Analyze memory patterns and generate insights.
 
 **Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `time_window` | string | No | Time range to analyze: `1d`, `7d`, `30d`. Default: `7d` |
-| `focus_areas` | string[] | No | Topics to focus analysis on |
+| `time_window` | string | No | "recent", "today", "week", "month", "1d", "7d", "30d", "90d" (default: "recent") |
+| `include_documents` | boolean | No | Include document chunks (default: false) |
+| `start_date` | string | No | Filter by date (ISO 8601) |
+| `end_date` | string | No | Filter by date (ISO 8601) |
 
 **Example:**
 ```json
 {
-  "time_window": "7d",
-  "focus_areas": ["project-alpha", "architecture"]
+  "time_window": "week",
+  "start_date": "2025-01-01",
+  "end_date": "2025-01-07"
 }
 ```
 
@@ -236,22 +235,22 @@ Analyze recent activity to find patterns, themes, and insights.
 
 ### save_context
 
-Save cognitive state for session handoff or checkpointing.
+Create a checkpoint of cognitive state for session handoffs.
 
 **Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `memory_ids` | string[] | No | Specific memories to include |
-| `session_id` | string | No | Human-readable session identifier |
-| `summary` | string | No | Brief description of the checkpoint |
+| `name` | string | Yes | Checkpoint name (must be unique per tenant) |
+| `description` | string | No | Detailed cognitive handoff description |
+
+Checkpoint names are unique per tenant. Saving with a duplicate name returns an error.
 
 **Example:**
 ```json
 {
-  "memory_ids": ["550e8400-e29b-41d4-a716-446655440000"],
-  "session_id": "api-redesign-2026-02",
-  "summary": "Completed auth module, starting on rate limiting"
+  "name": "API Investigation - 2026-02",
+  "description": "Found the bug in auth flow. Key discovery in memory_id: 550e8400-e29b-41d4-a716-446655440000. Next: test fix."
 }
 ```
 
@@ -259,20 +258,22 @@ Save cognitive state for session handoff or checkpointing.
 
 ### restore_context
 
-Resume work from a saved context checkpoint.
+Restore a saved checkpoint.
 
 **Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `checkpoint_id` | string | Yes | UUID of the checkpoint |
-| `merge_mode` | string | No | `replace` or `append`. Default: `append` |
+| `name` | string | Yes | Checkpoint name to restore |
+| `limit` | number | No | Max memories to return (default: 20) |
+
+**Special case:** `name: "awakening"` loads the user's personality configuration.
 
 **Example:**
 ```json
 {
-  "checkpoint_id": "770e8400-e29b-41d4-a716-446655440002",
-  "merge_mode": "append"
+  "name": "API Investigation - 2026-02",
+  "limit": 20
 }
 ```
 
@@ -280,18 +281,22 @@ Resume work from a saved context checkpoint.
 
 ### list_contexts
 
-List all saved context checkpoints.
+List saved checkpoints with optional filtering and pagination.
 
 **Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `limit` | number | No | Max results. Default: 20 |
+| `limit` | number | No | Max results (default: 20, max: 100) |
+| `offset` | number | No | Number of results to skip (default: 0) |
+| `name_pattern` | string | No | Filter by name (case-insensitive substring match) |
+| `include_descriptions` | boolean | No | Include full descriptions (default: false) |
 
 **Example:**
 ```json
 {
-  "limit": 10
+  "limit": 10,
+  "name_pattern": "investigation"
 }
 ```
 

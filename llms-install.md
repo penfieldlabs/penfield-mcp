@@ -27,7 +27,7 @@ No additional configuration needed. OAuth authentication happens automatically o
 Run this command:
 
 ```bash
-claude mcp add --transport http penfield https://mcp.penfield.app
+claude mcp add --transport http --scope user penfield https://mcp.penfield.app
 ```
 
 ### Cursor

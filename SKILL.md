@@ -94,8 +94,8 @@ Use the correct type. The system uses these for filtering and analysis.
 | `task` | Work items, action items | "TODO: Benchmark recall latency after index rebuild" |
 | `strategy` | Approaches, methods, plans | "For user's codebase: always check types.ts first, it's the source of truth" |
 | `checkpoint` | Milestone states | "Project at 80% — auth complete, UI remaining" |
-| `identity_core` | Immutable identity facts | Set via personality config, rarely stored manually |
-| `personality_trait` | Behavioral patterns | Set via personality config, rarely stored manually |
+| `identity_core` | Immutable identity facts | **Protected** — manage via `/api/v2/personality` or portal |
+| `personality_trait` | Behavioral patterns | **Protected** — manage via `/api/v2/personality` or portal |
 | `relationship` | Entity connections | "User works with Chad Schultz on cybersecurity content" |
 
 ## Importance Scores
@@ -215,8 +215,8 @@ connect({
 
 ```
 save_context({
-  memory_ids: [discovery.id, correction.id, initial.id],
-  session_id: "deployment-investigation-2026-02"
+  name: "Deployment Investigation - 2026-02",
+  description: "Found root cause: Friday batch job + deploy = connection pool exhaustion. Key memories: discovery.id, correction.id. Fix: stagger batch job to 03:00 UTC."
 })
 ```
 
@@ -224,8 +224,7 @@ Next session or different agent:
 
 ```
 restore_context({
-  checkpoint_id: "checkpoint-uuid",
-  merge_mode: "append"
+  name: "Deployment Investigation - 2026-02"
 })
 ```
 

@@ -18,7 +18,7 @@ Remote MCP server URL: https://mcp.penfield.app
 ### Claude Code
 
 ```bash
-claude mcp add --transport http penfield https://mcp.penfield.app
+claude mcp add --transport http --scope user penfield https://mcp.penfield.app
 ```
 
 ### Cursor
