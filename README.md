@@ -27,6 +27,12 @@ claude mcp add --transport http --scope user penfield https://mcp.penfield.app
 
 [Install Penfield in Cursor](cursor://anysphere.cursor-deeplink/mcp/install?name=Penfield&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIm1jcC1yZW1vdGUiLCJodHRwczovL21jcC5wZW5maWVsZC5hcHAvIl19)
 
+Cut and paste into your browser:
+
+```
+cursor://anysphere.cursor-deeplink/mcp/install?name=Penfield&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIm1jcC1yZW1vdGUiLCJodHRwczovL21jcC5wZW5maWVsZC5hcHAvIl19
+```
+
 Or add manually to `~/.cursor/mcp.json`:
 
 ```json
