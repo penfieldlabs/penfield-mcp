@@ -169,12 +169,14 @@ openclaw penfield login
 
 ## Links
 
+- MCP: [mcp.penfield.app](https://mcp.penfield.app)
 - Website: [penfield.app](https://penfield.app)
 - Portal: [portal.penfield.app](https://portal.penfield.app)
 - Cursor Directory: [cursor.directory/mcp/penfield](https://cursor.directory/mcp/penfield)
 - X: [@penfieldlabs](https://x.com/penfieldlabs)
 - GitHub: [@penfieldlabs](https://github.com/penfieldlabs)
 
+[penfieldlabs/penfield-mcp](https://glama.ai/mcp/servers/penfieldlabs/penfield-mcp/badges/score.svg)](https://glama.ai/mcp/servers/penfieldlabs/penfield-mcp)
 ---
 
 Copyright © 2025 Penfield™. All rights reserved.
