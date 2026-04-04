@@ -176,6 +176,8 @@ openclaw penfield login
 - X: [@penfieldlabs](https://x.com/penfieldlabs)
 - GitHub: [@penfieldlabs](https://github.com/penfieldlabs)
 
+[![penfield-mcp MCP server](https://glama.ai/mcp/servers/penfieldlabs/penfield-mcp/badges/card.svg)](https://glama.ai/mcp/servers/penfieldlabs/penfield-mcp)
+
 ---
 
 Copyright © 2025 Penfield™. All rights reserved.
