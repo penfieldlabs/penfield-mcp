@@ -4,12 +4,18 @@
   "title": "Penfield Memory",
   "description": "Persistent memory and knowledge graphs for AI agents. Hybrid search, context checkpoints, and more.",
   "status": "active",
-  "version": "1.22.0",
+  "version": "1.30.0",
   "websiteUrl": "https://penfield.app",
   "repository": {
     "url": "https://github.com/penfieldlabs/penfield-mcp",
     "source": "github"
   },
+  "icons": [
+    {
+      "src": "https://www.penfield.app/favicon.svg",
+      "mimeType": "image/svg+xml"
+    }
+  ],
   "remotes": [
     {
       "type": "streamable-http",
